@@ -22,6 +22,9 @@ dotenv.config({
   path: "../.env",
 });
 
+import userRouter from "./routes/user.route.js";
+app.use("/api/users", userRouter);
+
 connectDB().then(() => {
   app.listen(process.env.PORT || 8000, () => {
     console.log("server is running at port", process.env.PORT);
