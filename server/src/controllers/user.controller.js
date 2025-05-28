@@ -121,3 +121,6 @@ export const loginUser = async (req, res) => {
       .json({ message: "Something went wrong while logging in" });
   }
 };
+
+//shoot discoverded express validator now. Need to use it from next time.
+export const logoutUser = async (req, res) => {};
