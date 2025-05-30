@@ -15,4 +15,7 @@ const connectDB = async () => {
   }
 };
 
+//default admin account to upload course content
+const addAdmin = async () => {};
+
 export default connectDB;
