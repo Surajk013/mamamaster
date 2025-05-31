@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { User } from "./models/user.model.js";
+import process from "process";
 
 const connectDB = async () => {
   try {
@@ -16,6 +18,23 @@ const connectDB = async () => {
 };
 
 //default admin account to upload course content
-const addAdmin = async () => {};
+(async () => {
+  try {
+    const isAdminRegistered = await User.findOne({
+      email: process.env.ADMIN_EMAIL,
+    });
+    if (!isAdminRegistered) {
+      const admin = await User.create({
+        username: process.env.ADMIN_USERNAME,
+        password: process.env.ADMIN_PASSWORD,
+        email: process.env.ADMIN_EMAIL,
+      });
+
+      if (admin) console.log("Admin registered Successfully");
+    }
+  } catch (error) {
+    console.log("Error registering admin", error.message);
+  }
+})();
 
 export default connectDB;
