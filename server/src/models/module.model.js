@@ -1,59 +1,23 @@
 import { model, models, Schema } from "mongoose";
+import { Lesson } from "./lessonContent.model.js";
 
-const CourseQuestionSchema = new Schema({
-  text: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    enum: ["multiple-choice", "true-false", "coding", "short-answer"],
-    default: "multiple-choice",
-    required: true,
-  },
-  options: [
-    {
-      text: String,
-      isCorrect: Boolean,
-    },
-  ],
-  correctAnswer: {
-    type: String, // For non-multiple choice questions
-  },
-  points: {
-    type: Number,
-    default: 10,
-  },
-  explanation: {
-    type: String,
-  },
-  difficulty: {
-    type: String,
-    enum: ["beginner", "intermediate", "advanced"],
-    default: "beginner",
-  },
-});
-
-const LessonSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  content: {
-    type: String,
-    required: true,
-  },
-  questions: [CourseQuestionSchema],
-  completionCriteria: {
-    type: String,
-    enum: ["view", "quiz-pass", "both"],
-    default: "both",
-  },
-  passingScore: {
-    type: Number,
-    default: 70, // Percentage required to pass
-  },
-});
+// const LessonSchema = new Schema({
+//   title: {
+//     type: String,
+//     required: true,
+//   },
+//   content: [Lesson],
+// questions: [CourseQuestionSchema],
+// completionCriteria: {
+//   type: String,
+//   enum: ["view", "quiz-pass", "both"],
+//   default: "both",
+// },
+// passingScore: {
+//   type: Number,
+//   default: 70, // Percentage required to pass
+// },
+// });
 
 const ModuleSchema = new Schema(
   {
@@ -69,7 +33,7 @@ const ModuleSchema = new Schema(
       type: String,
       required: true,
     },
-    lessons: [LessonSchema],
+    lessons: [Lesson],
     // finalQuiz: {
     //   isEnabled: {
     //     type: Boolean,
@@ -86,4 +50,3 @@ const ModuleSchema = new Schema(
 );
 
 export const Module = models?.Module || model("Module", ModuleSchema);
-export const Lesson = models?.Lesson || model("Lesson", LessonSchema);
