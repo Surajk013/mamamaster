@@ -2,9 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import './App.css'
 import Hero from './pages/Home'
+import About from './pages/About'
 
 // Placeholder components
-const About = () => <div className="p-8">About Us</div>
 const Courses = () => <div className="p-8">Courses</div>
 const Testimonials = () => <div className="p-8">Testimonials</div>
 const Contact = () => <div className="p-8">Contact Us</div>
@@ -15,6 +15,7 @@ function App() {
   return (
     <Router>
       <Navbar />
+      
       <Routes>
         <Route path="/" element={<Hero />} />
         <Route path="/about" element={<About />} />

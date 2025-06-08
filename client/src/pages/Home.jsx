@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import AboutTeamCard from '../components/AboutTeamCard';
 
 
 const words = ['fun!', 'engaging!', 'interesting!', 'rewarding!', 'easy!'];
@@ -128,6 +129,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      <AboutTeamCard />
       <style>{`html { scroll-behavior: smooth; }`}</style>
     </>
   );
