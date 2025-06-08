@@ -1,1 +1,2 @@
-#### Whatcha lookin at bish
+TODO: 
+- [ ] make a plan
