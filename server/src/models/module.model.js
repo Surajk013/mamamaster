@@ -1,5 +1,7 @@
-import { model, models, Schema } from "mongoose";
-import { Lesson } from "./lessonContent.model.js";
+import mongoose from "mongoose";
+const { model, models, Schema } = mongoose;
+
+import { lessonSchema as Lesson } from "./lessonContent.model.js";
 
 // const LessonSchema = new Schema({
 //   title: {
@@ -33,7 +35,21 @@ const ModuleSchema = new Schema(
       type: String,
       required: true,
     },
+    orderInCourse: {
+      type: Number,
+      required: true,
+    },
     lessons: [Lesson],
+    difficulty: {
+      type: String,
+      enum: ["easy", "medium", "hard", "insane"],
+      required: true,
+    },
+    slug: {
+      type: String,
+      unique: true,
+      sparse: true, // allows null values but enforces uniqueness when present
+    },
     // finalQuiz: {
     //   isEnabled: {
     //     type: Boolean,
@@ -48,5 +64,17 @@ const ModuleSchema = new Schema(
   },
   { timestamps: true },
 );
+
+// Pre-save middleware to generate slug if not provided
+ModuleSchema.pre("save", function (next) {
+  if (!this.slug && this.title) {
+    this.slug = this.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
+  }
+  next();
+});
 
 export const Module = models?.Module || model("Module", ModuleSchema);
