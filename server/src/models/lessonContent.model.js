@@ -4,7 +4,6 @@ import { Module } from "./module.model.js";
 const CourseQuestionSchema = new Schema({
   id: {
     type: String,
-    required: true,
   },
   question: {
     type: String,
@@ -257,12 +256,12 @@ export const lessonSchema = new Schema(
       sparse: true, // allows null values but enforces uniqueness when present
     },
 
-    // Module relationship
-    moduleID: {
-      type: Schema.Types.ObjectId,
-      ref: "Module",
-      required: true,
-    },
+    // // Module relationship || Is this actually required ? as we are directly embedding modules
+    // moduleID: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "Module",
+    //   required: true,
+    // },
 
     // Order within module
     orderInModule: {
@@ -281,7 +280,7 @@ export const lessonSchema = new Schema(
 );
 
 // Indexes for performance
-lessonSchema.index({ moduleID: 1, orderInModule: 1 });
+lessonSchema.index({ orderInModule: 1 });
 // lessonSchema.index({ slug: 1 });
 lessonSchema.index({ isPublished: 1 });
 
@@ -297,5 +296,8 @@ lessonSchema.pre("save", function (next) {
   next();
 });
 
-export const Lesson =
-  mongoose.models?.Lesson || mongoose.model("Lesson", lessonSchema);
+//// DONT HAVE TO MODEL IT COS WE NOT CREATING A SEPERATE DOCUMENT FOR THIS
+// WE ARE EMBEDDING IT INSIDE MODULE !
+
+// export const Lesson =
+//   mongoose.models?.Lesson || mongoose.model("Lesson", lessonSchema);

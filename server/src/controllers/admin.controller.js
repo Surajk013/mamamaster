@@ -1,21 +1,22 @@
 import { Course } from "../models/course.model.js";
 import { Module } from "../models/module.model.js";
-import { Lesson } from "../models/lessonContent.model.js";
 import mongoose from "mongoose";
 
 //need to add express validator to escape xss
 export const addCourse = async (req, res) => {
+  //each course has multiple modules (referenced so not an issue)
+  //each module contains multiple lessons.. hmm
+  //each lesson contains multiple questions
+  let session = await mongoose.startSession();
+
   try {
-    const course = req.body;
-    const modules = course.modules;
-    console.log(modules);
-    //each course has multiple modules (referenced so not an issue)
-    //each module contains multiple lessons.. hmm
-    //each lesson contains multiple questions
+    const { title, thumbnail, difficulty, description, modules } = req.body;
 
     //use transactions
-    const session = await mongoose.startSession();
     const courseModules = [];
+    //This operation is a no-op. The transaction won't start on the
+    //server until the first command is sent on the session.
+    session.startTransaction();
 
     //shoot for each dont wait for promises to resolve apparently smh
     // modules.forEach(async (module) => {
@@ -23,13 +24,35 @@ export const addCourse = async (req, res) => {
     //   courseModules.push(addModule);
     // });
 
+    // add the modules and lessons tp the db first (embedded)
     for (const module of modules) {
-      const addModule = await Module.create(module, { session });
-      courseModules.push(addModule);
+      let addModule = await Module.create([module], { session });
+      courseModules.push(addModule[0]._id);
+      console.log(courseModules);
     }
+
+    const addCourse = await Course.create(
+      [
+        {
+          title,
+          description,
+          thumbnail,
+          difficulty,
+          modules: courseModules,
+        },
+      ],
+      { session },
+    );
+
+    await session.commitTransaction();
 
     return res.status(200).json({ message: "okay" });
   } catch (error) {
+    await session.abortTransaction();
+    console.error("Transaction failed:", error);
     console.log("Error adding courses", error.message);
+    return res.status(500).json({ message: "Server error" });
+  } finally {
+    session.endSession(); // End the session
   }
 };
