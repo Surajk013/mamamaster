@@ -46,7 +46,8 @@ export const addCourse = async (req, res) => {
 
     await session.commitTransaction();
 
-    return res.status(200).json({ message: "okay" });
+    if (addCourse[0]._id)
+      return res.status(200).json({ message: "Course Successfully Added" });
   } catch (error) {
     await session.abortTransaction();
     console.error("Transaction failed:", error);
@@ -54,5 +55,13 @@ export const addCourse = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   } finally {
     session.endSession(); // End the session
+  }
+};
+
+export const getCourse = async (req, res) => {
+  try {
+  } catch (error) {
+    console.log("Error fetching Courses");
+    return res.status(200).json({ message: "Server Error" });
   }
 };
