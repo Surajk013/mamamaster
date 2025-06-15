@@ -109,7 +109,6 @@ export const loginUser = async (req, res) => {
       httpOnly: true,
       secure: true,
     };
-
     return res
       .status(200)
       .cookie("accessToken", accessToken, options)
@@ -123,4 +122,5 @@ export const loginUser = async (req, res) => {
 };
 
 //shoot discoverded express validator now. Need to use it from next time.
-export const logoutUser = async (req, res) => {};
+//logout only frontend for now. Need to add redis later.
+//export const logoutUser = async (req, res) => {};

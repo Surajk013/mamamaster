@@ -1,4 +1,6 @@
-import { model, models, Schema } from "mongoose";
+import mongoose from "mongoose";
+const { model, models, Schema } = mongoose;
+
 import { Module } from "./module.model.js";
 
 const CourseSchema = new Schema(
